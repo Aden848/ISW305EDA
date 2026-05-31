@@ -1,0 +1,153 @@
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Estudiante {
+public:
+    string nombreCompleto;
+    string matricula;
+    float promedioFinal;
+
+    Estudiante(string nombre, string mat, float promedio) {
+        nombreCompleto = nombre;
+        matricula = mat;
+        promedioFinal = promedio;
+    }
+};
+
+class Nodo {
+public:
+    Estudiante estudiante;
+    Nodo* siguiente;
+
+    Nodo(Estudiante est) : estudiante(est) {
+        siguiente = nullptr;
+    }
+};
+
+class ListaEstudiantes {
+private:
+    Nodo* cabeza;
+
+public:
+    ListaEstudiantes() {
+        cabeza = nullptr;
+    }
+
+    void registrarEstudiante(string nombre, string matricula, float promedio) {
+        Estudiante nuevoEstudiante(nombre, matricula, promedio);
+        Nodo* nuevoNodo = new Nodo(nuevoEstudiante);
+
+        if (cabeza == nullptr) {
+            cabeza = nuevoNodo;
+        } else {
+            Nodo* actual = cabeza;
+
+            while (actual->siguiente != nullptr) {
+                actual = actual->siguiente;
+            }
+
+            actual->siguiente = nuevoNodo;
+        }
+
+        cout << "Estudiante registrado correctamente.\n";
+    }
+
+    void mostrarEstudiantes() {
+        if (cabeza == nullptr) {
+            cout << "No hay estudiantes registrados.\n";
+            return;
+        }
+
+        Nodo* actual = cabeza;
+
+        cout << "\n===== LISTA DE ESTUDIANTES =====\n";
+
+        while (actual != nullptr) {
+            cout << "Nombre completo: " << actual->estudiante.nombreCompleto << endl;
+            cout << "Matricula: " << actual->estudiante.matricula << endl;
+            cout << "Promedio final: " << actual->estudiante.promedioFinal << endl;
+            cout << "-----------------------------\n";
+
+            actual = actual->siguiente;
+        }
+    }
+
+    void contarEstudiantesAprobados() {
+        int contador = 0;
+        Nodo* actual = cabeza;
+
+        while (actual != nullptr) {
+            if (actual->estudiante.promedioFinal >= 70) {
+                contador++;
+            }
+
+            actual = actual->siguiente;
+        }
+
+        cout << "\nCantidad de estudiantes con promedio igual o superior a 70: "
+             << contador << endl;
+    }
+};
+
+int main() {
+    ListaEstudiantes lista;
+    int opcion;
+    string nombre, matricula;
+    float promedio;
+
+    do {
+        cout << "\n===== SISTEMA DE REGISTRO DE ESTUDIANTES =====\n";
+        cout << "1. Registrar estudiante\n";
+        cout << "2. Mostrar estudiantes\n";
+        cout << "3. Contar estudiantes aprobados\n";
+        cout << "4. Salir\n";
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+
+        cin.ignore();
+
+        switch (opcion) {
+        case 1:
+            cout << "Ingrese el nombre completo: ";
+            getline(cin, nombre);
+
+            cout << "Ingrese la matricula: ";
+            getline(cin, matricula);
+
+            cout << "Ingrese el promedio final: ";
+            cin >> promedio;
+
+            lista.registrarEstudiante(nombre, matricula, promedio);
+            break;
+
+        case 2:
+            lista.mostrarEstudiantes();
+            break;
+
+        case 3:
+            lista.contarEstudiantesAprobados();
+            break;
+
+        case 4:
+            cout << "Saliendo del programa...\n";
+            break;
+
+        default:
+            cout << "Opcion no valida.\n";
+            break;
+        }
+
+    } while (opcion != 4);
+
+    return 0;
+}
