@@ -1,0 +1,177 @@
+[Uploading m/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+class Pasajero {
+public:
+    string nombre;
+    int asiento;
+};
+
+class Avion {
+public:
+    string matricula;
+    string modelo;
+    string fabricante;
+    int asientosTotales;
+};
+
+class Vuelo {
+public:
+    string terminal;
+    string numVuelo;
+    string ciudad;
+    string pais;
+    string tipo;
+    float kilometros;
+    float precioBase;
+
+    Avion avion;
+    Pasajero pasajeros[200];
+    int cantPasajeros = 0;
+
+    float calcularPrecio() {
+        if (tipo == "nacional" || tipo == "NACIONAL")
+            return precioBase + (kilometros * 0.20);
+        else
+            return precioBase + (kilometros * 0.10);
+    }
+
+    float ingresoTotal() {
+        float precio = calcularPrecio();
+        int total = avion.asientosTotales;
+
+        int primera = total * 0.15;
+        int segunda = total * 0.25;
+        int tercera = total - primera - segunda;
+
+        float totalIngreso = 0;
+
+        totalIngreso += primera * precio * 1.5;
+        totalIngreso += segunda * precio * 1.2;
+        totalIngreso += tercera * precio;
+
+        return totalIngreso;
+    }
+
+    void registrarPasajeros() {
+        int cantidad;
+        cout << "Cantidad de pasajeros a registrar: ";
+        cin >> cantidad;
+        cin.ignore();
+
+        for (int i = 0; i < cantidad; i++) {
+            cout << "\nPasajero #" << i + 1 << endl;
+
+            cout << "Nombre: ";
+            getline(cin, pasajeros[i].nombre);
+
+            cout << "Numero de asiento: ";
+            cin >> pasajeros[i].asiento;
+            cin.ignore();
+
+            cantPasajeros++;
+        }
+    }
+
+    void mostrarPasajeros() {
+        cout << "\nLISTA DE PASAJEROS\n";
+        for (int i = 0; i < cantPasajeros; i++) {
+            cout << i + 1 << ". "
+                 << pasajeros[i].nombre
+                 << " - Asiento: "
+                 << pasajeros[i].asiento << endl;
+        }
+    }
+
+    void mostrarResumen() {
+        cout << "\n==============================" << endl;
+        cout << "RESUMEN DEL VUELO" << endl;
+        cout << "==============================" << endl;
+        cout << "Terminal: " << terminal << endl;
+        cout << "Vuelo: " << numVuelo << endl;
+        cout << "Destino: " << ciudad << ", " << pais << endl;
+        cout << "Tipo: " << tipo << endl;
+        cout << "Kilometros: " << kilometros << endl;
+        cout << "Avion: " << avion.modelo << endl;
+        cout << "Asientos: " << avion.asientosTotales << endl;
+        cout << fixed << setprecision(2);
+        cout << "Precio Pasaje: RD$ " << calcularPrecio() << endl;
+        cout << "Ingreso Total: RD$ " << ingresoTotal() << endl;
+    }
+};
+
+int main() {
+    Vuelo vuelos[10];
+    int n;
+
+    cout << "======================================" << endl;
+    cout << " SISTEMA TERMINAL AEREA INTERNACIONAL " << endl;
+    cout << "======================================" << endl;
+
+    cout << "Cantidad de vuelos a registrar (max 10): ";
+    cin >> n;
+    cin.ignore();
+
+    for (int i = 0; i < n; i++) {
+        cout << "\n==================================" << endl;
+        cout << "Registro del vuelo #" << i + 1 << endl;
+        cout << "==================================" << endl;
+
+        cout << "Terminal: ";
+        getline(cin, vuelos[i].terminal);
+
+        cout << "Numero de vuelo: ";
+        getline(cin, vuelos[i].numVuelo);
+
+        cout << "Ciudad destino: ";
+        getline(cin, vuelos[i].ciudad);
+
+        cout << "Pais destino: ";
+        getline(cin, vuelos[i].pais);
+
+        cout << "Tipo (nacional/internacional): ";
+        getline(cin, vuelos[i].tipo);
+
+        cout << "Kilometros a recorrer: ";
+        cin >> vuelos[i].kilometros;
+
+        cout << "Precio base: ";
+        cin >> vuelos[i].precioBase;
+        cin.ignore();
+
+        cout << "\n--- DATOS DEL AVION ---" << endl;
+
+        cout << "Matricula: ";
+        getline(cin, vuelos[i].avion.matricula);
+
+        cout << "Modelo: ";
+        getline(cin, vuelos[i].avion.modelo);
+
+        cout << "Fabricante: ";
+        getline(cin, vuelos[i].avion.fabricante);
+
+        cout << "Cantidad total de asientos: ";
+        cin >> vuelos[i].avion.asientosTotales;
+        cin.ignore();
+
+        vuelos[i].registrarPasajeros();
+
+        vuelos[i].mostrarResumen();
+
+        vuelos[i].mostrarPasajeros();
+    }
+
+    cout << "\nPrograma finalizado correctamente." << endl;
+
+    return 0;
+}ain (6).cpp…]()
