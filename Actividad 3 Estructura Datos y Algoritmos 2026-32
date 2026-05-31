@@ -1,0 +1,134 @@
+
+/******************************************************************************
+
+Welcome to GDB Online.
+  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
+  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
+  Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <stack>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+class EditorTexto {
+private:
+    string textoActual;
+    stack<string> accionesRealizadas;
+    stack<string> accionesDeshechas;
+
+public:
+    void escribir(string palabra) {
+        accionesRealizadas.push(textoActual);
+
+        if (!textoActual.empty()) {
+            textoActual += " ";
+        }
+
+        textoActual += palabra;
+
+        while (!accionesDeshechas.empty()) {
+            accionesDeshechas.pop();
+        }
+    }
+
+    void borrar() {
+        if (textoActual.empty()) {
+            cout << "No hay texto para borrar." << endl;
+            return;
+        }
+
+        accionesRealizadas.push(textoActual);
+
+        size_t posicion = textoActual.find_last_of(" ");
+
+        if (posicion == string::npos) {
+            textoActual = "";
+        } else {
+            textoActual = textoActual.substr(0, posicion);
+        }
+
+        while (!accionesDeshechas.empty()) {
+            accionesDeshechas.pop();
+        }
+    }
+
+    void deshacer() {
+        if (accionesRealizadas.empty()) {
+            cout << "No hay acciones para deshacer." << endl;
+            return;
+        }
+
+        accionesDeshechas.push(textoActual);
+        textoActual = accionesRealizadas.top();
+        accionesRealizadas.pop();
+
+        mostrar();
+    }
+
+    void rehacer() {
+        if (accionesDeshechas.empty()) {
+            cout << "No hay acciones para rehacer." << endl;
+            return;
+        }
+
+        accionesRealizadas.push(textoActual);
+        textoActual = accionesDeshechas.top();
+        accionesDeshechas.pop();
+
+        mostrar();
+    }
+
+    void mostrar() {
+        cout << "Texto actual: " << textoActual << endl;
+    }
+};
+
+int main() {
+    EditorTexto editor;
+    string comando;
+
+    cout << "===== SIMULADOR DE DESHACER/REHACER =====" << endl;
+    cout << "Comandos disponibles:" << endl;
+    cout << "escribir <texto>" << endl;
+    cout << "borrar" << endl;
+    cout << "deshacer" << endl;
+    cout << "rehacer" << endl;
+    cout << "mostrar" << endl;
+    cout << "salir" << endl;
+
+    do {
+        cout << "\nIngrese un comando: ";
+        getline(cin, comando);
+
+        if (comando.rfind("escribir ", 0) == 0) {
+            string palabra = comando.substr(9);
+            editor.escribir(palabra);
+        }
+        else if (comando == "borrar") {
+            editor.borrar();
+            editor.mostrar();
+        }
+        else if (comando == "deshacer") {
+            editor.deshacer();
+        }
+        else if (comando == "rehacer") {
+            editor.rehacer();
+        }
+        else if (comando == "mostrar") {
+            editor.mostrar();
+        }
+        else if (comando == "salir") {
+            cout << "Programa finalizado." << endl;
+        }
+        else {
+            cout << "Comando no valido." << endl;
+        }
+
+    } while (comando != "salir");
+
+    return 0;
+}
