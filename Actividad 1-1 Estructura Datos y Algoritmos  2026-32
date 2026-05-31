@@ -1,0 +1,99 @@
+
+/******************************************************************************
+
+Welcome to GDB Online.
+  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
+  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
+  Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <string>
+using namespace std;
+const int MAX = 20;
+// Arreglos paralelos
+string nombre[MAX], institucion[MAX], categoria[MAX], nacionalidad[MAX];
+int puntaje[MAX];
+int total = 0;
+// Registrar equipos
+void registrar() {
+cout << "\n Cantidad de equipos a registrar: ";
+cin >> total;
+cin.ignore();
+for (int i = 0; i < total; i++) {
+cout << "\n「 Equipo " << i+1 << " 」\n";
+cout << "Nombre: "; getline(cin, nombre[i]);
+cout << "Institucion: "; getline(cin, institucion[i]);
+cout << "Categoria: "; getline(cin, categoria[i]);
+cout << "Nacionalidad: "; getline(cin, nacionalidad[i]);
+cout << "Puntaje: "; cin >> puntaje[i];
+cin.ignore();
+}
+cout << "\n Los equipos se registraron correctamente \n";
+}
+// Ordenar por puntaje
+void ordenar() {
+for (int i = 0; i < total - 1; i++) {
+for (int j = i + 1; j < total; j++) {
+if (puntaje[j] > puntaje[i]) {
+swap(puntaje[i], puntaje[j]);
+swap(nombre[i], nombre[j]);
+swap(institucion[i], institucion[j]);
+swap(categoria[i], categoria[j]);
+swap(nacionalidad[i], nacionalidad[j]);
+}
+}
+}
+cout << "\n「 Equipos por puntaje 」\n";
+for (int i = 0; i < total; i++)
+cout << i+1 << ". " << nombre[i] << " | " << puntaje[i] << " pts | " << nacionalidad[i] << "\n";
+}
+// Mejor y peor rendimiento
+void mejorYPeor() {
+int iMax = 0, iMin = 0;
+for (int i = 1; i < total; i++) {
+if (puntaje[i] > puntaje[iMax]) iMax = i;
+if (puntaje[i] < puntaje[iMin]) iMin = i;
+}
+cout << "\nMejor: " << nombre[iMax] << " con " << puntaje[iMax] << " pts\n";
+cout << "Peor: " << nombre[iMin] << " con " << puntaje[iMin] << " pts\n";
+}
+// Filtrar por pais
+void filtrarPorPais() {
+string pais;
+cout << "Ingrese pais: ";
+cin.ignore();
+getline(cin, pais);
+cout << "\nEquipos de " << pais << ":\n";
+for (int i = 0; i < total; i++)
+if (nacionalidad[i] == pais)
+cout << "- " << nombre[i] << " | " << puntaje[i] << " pts\n";
+}
+// Cuantos equipos nacionales superan cierto puntaje
+void equiposNacionales() {
+string paisLocal;
+int umbral, count = 0;
+cout << "Pais local: ";
+cin.ignore();
+getline(cin, paisLocal);
+cout << "Puntaje minimo: ";
+cin >> umbral;
+for (int i = 0; i < total; i++)
+if (nacionalidad[i] == paisLocal && puntaje[i] > umbral)
+count++;
+cout << "Equipos de " << paisLocal << " con más de " << umbral << " pts: " << count << "\n";
+}
+int main() {
+cout << "\n --- MENÚ --- \n";
+int op;
+do {
+cout << "\n1. Registrar\n2. Ordenar\n3. Mejor/Peor\n4. Filtrar por pais\n5. Equipos nacionales\n6. Salir\n > Opcion: ";
+cin >> op;
+if (op == 1) registrar();
+else if (op == 2) ordenar();
+else if (op == 3) mejorYPeor();
+else if (op == 4) filtrarPorPais();
+else if (op == 5) equiposNacionales();
+} while (op != 6);
+return 0;
+}
